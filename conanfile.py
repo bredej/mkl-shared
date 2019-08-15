@@ -6,8 +6,7 @@ class mklDynamic(ConanFile):
     url = "https://github.com/shellshocked2003/mkl-shared"
     homepage = "https://anaconda.org/anaconda/mkl"
     author = "Michael Gardner <mhgardner@berkeley.edu>"
-    license = "MIT"
-    exports = ["LICENSE.md"]    
+    license = "Intel Simplified Software License"   
     settings = "os", "compiler", "build_type", "arch"
     description = "Intel Math Kernel Library Shared Binaries"
 
@@ -30,4 +29,5 @@ class mklDynamic(ConanFile):
         self.copy("*") # assume package as-is, but you can also copy specific files or rearrange
 
     def package_info(self):
+        self.copy(pattern="LICENSE.txt", dst="licenses", src="./info")        
         self.cpp_info.libs = ["mkl-shared"]
