@@ -5,10 +5,16 @@ class mklDynamic(ConanFile):
     version = "2019.4"
     url = "https://github.com/shellshocked2003/mkl-shared"
     homepage = "https://anaconda.org/anaconda/mkl"
-    author = "Michael Gardner <mhgardner@berkeley.edu>"    
+    author = "Michael Gardner <mhgardner@berkeley.edu>"
+    license = "MIT"
+    exports = ["LICENSE.md"]    
     settings = "os", "compiler", "build_type", "arch"
     description = "Intel Math Kernel Library Shared Binaries"
 
+    # Custom attributes for Bincrafters recipe conventions
+    _source_subfolder = "source_subfolder"
+    _build_subfolder = "build_subfolder"
+    
     def build(self):
         if self.settings.os == "Windows":
             url = ("https://anaconda.org/anaconda/mkl/2019.4/download/win-64/mkl-2019.4-245.tar.bz2")
@@ -23,5 +29,5 @@ class mklDynamic(ConanFile):
     def package(self):
         self.copy("*") # assume package as-is, but you can also copy specific files or rearrange
 
-    def package_info(self):  # still very useful for package consumers
+    def package_info(self):
         self.cpp_info.libs = ["mkl-shared"]
