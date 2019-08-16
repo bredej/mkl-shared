@@ -9,10 +9,17 @@ class mklDynamic(ConanFile):
     license = "Intel Simplified Software License"   
     settings = "os", "compiler", "build_type", "arch"
     description = "Intel Math Kernel Library Shared Binaries"
+    exports_sources = ["CMakeLists.txt"]
+    generators = "cmake"    
 
     # Custom attributes for Bincrafters recipe conventions
     _source_subfolder = "source_subfolder"
     _build_subfolder = "build_subfolder"
+
+    def _configure_cmake(self):
+        cmake = CMake(self)
+        cmake.configure(build_folder=self._build_subfolder)
+        return cmake    
     
     def build(self):
         if self.settings.os == "Windows":
@@ -23,11 +30,12 @@ class mklDynamic(ConanFile):
             url = ("https://anaconda.org/anaconda/mkl/2019.4/download/linux-64/mkl-2019.4-243.tar.bz2")
         else:
             raise Exception("Binary does not exist for these settings")
-        tools.get(url)
+        tools.get(url, destination=self._source_subfolder)
 
     def package(self):
-        self.copy("*") # assume package as-is, but you can also copy specific files or rearrange
+        # self.copy(pattern="LICENSE.txt", dst="licenses", src="./info")
+        self.copy("LICENSE.txt", dst="licenses", src=self._source_subfolder + "/info")        
+        self.copy("*", dst="lib", src=self._source_subfolder + "/lib") # assume package as-is, but you can also copy specific files or rearrange
 
     def package_info(self):
-        self.copy(pattern="LICENSE.txt", dst="licenses", src="./info")        
-        self.cpp_info.libs = ["mkl-shared"]
+        self.cpp_info.libs = tools.collect_libs(self)
