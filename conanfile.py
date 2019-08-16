@@ -10,7 +10,8 @@ class mklDynamic(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
     description = "Intel Math Kernel Library Shared Binaries"
     exports_sources = ["CMakeLists.txt"]
-    generators = "cmake"    
+    generators = "cmake"
+    build_policy = "missing"
 
     # Custom attributes for Bincrafters recipe conventions
     _source_subfolder = "source_subfolder"
@@ -33,9 +34,8 @@ class mklDynamic(ConanFile):
         tools.get(url, destination=self._source_subfolder)
 
     def package(self):
-        # self.copy(pattern="LICENSE.txt", dst="licenses", src="./info")
         self.copy("LICENSE.txt", dst="licenses", src=self._source_subfolder + "/info")        
-        self.copy("*", dst="lib", src=self._source_subfolder + "/lib") # assume package as-is, but you can also copy specific files or rearrange
+        # self.copy("*", dst="lib", src=self._source_subfolder + "/lib") # assume package as-is, but you can also copy specific files or rearrange
 
     def package_info(self):
         self.cpp_info.libs = tools.collect_libs(self)
