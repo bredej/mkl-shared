@@ -1,14 +1,22 @@
+linux: &linux
+   os: linux
+   dist: xenial
+   language: python
+   python: "3.7"
+   services:
+     - docker
+     
+osx: &osx
+   os: osx
+   language: generic
+   
 matrix:
-  fast_finish: true
-  include:
-    - os: osx
-      osx_image: xcode10.2
-      language: generic
-      
-    - os: linux
-      dist: xenial
-      python: 3.6      
-      sudo: true
+   include:
+      - <<: *linux
+        env: CONAN_GCC_VERSIONS=7 CONAN_DOCKER_IMAGE=conanio/gcc7
+      - <<: *osx
+        osx_image: xcode10.2
+        env: CONAN_APPLE_CLANG_VERSIONS=10.0
     
 install:
   - chmod +x .travis/install.sh
