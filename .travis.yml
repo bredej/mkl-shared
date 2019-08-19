@@ -1,20 +1,15 @@
-linux: &linux
-   os: linux
-   sudo: required
-   language: python
-   python: "3.6"
-   
-osx: &osx
-   os: osx
-   sudo: required
-   language: python
-   python: "3.6"   
-
 matrix:
-   include:
-      - <<: *linux
-      - <<: *osx
-        osx_image: xcode10.1
+  fast_finish: true
+  include:
+    - os: osx
+      osx_image: xcode10.2
+      python: 3.6
+      sudo: true
+      
+    - os: linux
+      dist: xenial
+      python: 3.6      
+      sudo: true
     
 install:
   - chmod +x .travis/install.sh
