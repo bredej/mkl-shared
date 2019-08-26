@@ -25,7 +25,7 @@ class mklDynamic(ConanFile):
     
     def build(self):
         if self.settings.os == "Windows":
-            url = ("https://anaconda.org/anaconda/mkl/2019.4/download/win-64/mkl-2019.4-245.tar.bz2")
+            url = ("https://anaconda.org/intel/mkl-devel/2019.4/download/win-64/mkl-devel-2019.4-intel_245.tar.bz2")
         elif self.settings.os == "Macos":
             url = ("https://anaconda.org/anaconda/mkl/2019.4/download/osx-64/mkl-2019.4-233.tar.bz2")
         elif self.settings.os == "Linux":
