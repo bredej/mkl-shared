@@ -26,6 +26,8 @@ class mklDynamic(ConanFile):
     def build(self):
         if self.settings.os == "Windows":
             url = ("https://anaconda.org/intel/mkl-devel/2019.4/download/win-64/mkl-devel-2019.4-intel_245.tar.bz2")
+            bin_url = ("https://anaconda.org/anaconda/mkl/2019.4/download/win-64/mkl-2019.4-245.tar.bz2")
+            tools.get(bin_url, destination=self._source_subfolder)            
         elif self.settings.os == "Macos":
             url = ("https://anaconda.org/anaconda/mkl/2019.4/download/osx-64/mkl-2019.4-233.tar.bz2")
         elif self.settings.os == "Linux":
@@ -38,6 +40,7 @@ class mklDynamic(ConanFile):
         self.copy("LICENSE.txt", dst="licenses", src=self._source_subfolder + "/info")        
         if self.settings.os == "Windows":
             self.copy("*", dst="lib", src=self._source_subfolder + "/Library/lib")
+            self.copy("*", dst="bin", src=self._source_subfolder + "/Library/bin")            
         else:
             self.copy("*", dst="lib", src=self._source_subfolder + "/lib")
 
@@ -46,6 +49,6 @@ class mklDynamic(ConanFile):
         self.cpp_info.libdirs = ['lib']  # Directories where libraries can be found
         self.cpp_info.bindirs = ['bin', 'lib']  # Directories where executables and shared libs can be found
         self.env_info.PATH.append(os.path.join(self.package_folder, "bin"))
-        self.env_info.PATH.append(os.path.join(self.package_folder, "lib"))        
+        self.env_info.PATH.append(os.path.join(self.package_folder, "lib"))
         self.env_info.LD_LIBRARY_PATH.append(os.path.join(self.package_folder, "lib"))
         self.env_info.DYLD_LIBRARY_PATH.append(os.path.join(self.package_folder, "lib"))        
