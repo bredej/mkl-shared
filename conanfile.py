@@ -9,6 +9,8 @@ class mklDynamic(ConanFile):
     author = "Michael Gardner <mhgardner@berkeley.edu>"
     license = "Intel Simplified Software License"
     settings = {"os": None, "arch": ["x86_64"]}
+    options = {"single_lib" : [True, False]}
+    default_options = {"single_lib": False}    
     description = "Intel Math Kernel Library Shared Binaries"
     exports_sources = ["CMakeLists.txt"]
     generators = "cmake"
@@ -45,7 +47,11 @@ class mklDynamic(ConanFile):
             self.copy("*", dst="lib", src=self._source_subfolder + "/lib")
 
     def package_info(self):
-        self.cpp_info.libs = tools.collect_libs(self)
+        if "single_lib" in self.options is False:
+            self.cpp_info.libs = tools.collect_libs(self)            
+        else :
+            self.cpp_info.libs = ["mkl_rt"]            
+            
         self.cpp_info.libdirs = ['lib']  # Directories where libraries can be found
         self.cpp_info.bindirs = ['bin', 'lib']  # Directories where executables and shared libs can be found
         self.env_info.PATH.append(os.path.join(self.package_folder, "bin"))
