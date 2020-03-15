@@ -10,7 +10,7 @@ class mklDynamic(ConanFile):
     license = "Intel Simplified Software License"
     settings = {"os": None, "arch": ["x86_64"]}
     options = {"single_lib" : [True, False]}
-    default_options = {"single_lib": False}    
+    default_options = {"single_lib": False}
     description = "Intel Math Kernel Library Shared Binaries"
     exports_sources = ["CMakeLists.txt"]
     generators = "cmake"
@@ -39,22 +39,22 @@ class mklDynamic(ConanFile):
         tools.get(url, destination=self._source_subfolder)
 
     def package(self):
-        self.copy("LICENSE.txt", dst="licenses", src=self._source_subfolder + "/info")        
+        self.copy("LICENSE.txt", dst="licenses", src=self._source_subfolder + "/info")
         if self.settings.os == "Windows":
             self.copy("*", dst="lib", src=self._source_subfolder + "/Library/lib")
-            self.copy("*", dst="bin", src=self._source_subfolder + "/Library/bin")            
+            self.copy("*", dst="bin", src=self._source_subfolder + "/Library/bin")
         else:
             self.copy("*", dst="lib", src=self._source_subfolder + "/lib")
 
     def package_info(self):
         if "single_lib" in self.options is False:
-            self.cpp_info.libs = tools.collect_libs(self)            
+            self.cpp_info.libs = tools.collect_libs(self)
         else :
-            self.cpp_info.libs = ["mkl_rt"]            
+            self.cpp_info.libs = ["mkl_rt"]
             
         self.cpp_info.libdirs = ['lib']  # Directories where libraries can be found
         self.cpp_info.bindirs = ['bin', 'lib']  # Directories where executables and shared libs can be found
         self.env_info.PATH.append(os.path.join(self.package_folder, "bin"))
         self.env_info.PATH.append(os.path.join(self.package_folder, "lib"))
         self.env_info.LD_LIBRARY_PATH.append(os.path.join(self.package_folder, "lib"))
-        self.env_info.DYLD_LIBRARY_PATH.append(os.path.join(self.package_folder, "lib"))        
+        self.env_info.DYLD_LIBRARY_PATH.append(os.path.join(self.package_folder, "lib"))
